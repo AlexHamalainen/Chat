@@ -1,2 +1,18 @@
 # Chat
 Ajaxilla toteutettu chatti joka vie ja hakee tietokannasta chatviestit
+
+Aja nämä SQL koodit niin saat luotua oikeanlaisen taulun tietokantaasi! Viestin pituus on tässä rajoitettu 1000 merkkiin kuten myös chat.html lomakkeessa eli sen pidempiä viestejä ei pitäisi lähteäkään tietokantaan päin. Samoin nimimerkki on rajoitettu 60 merkkiin.
+
+CREATE TABLE `chat` (
+  `ID` int(11) NOT NULL,
+  `Viesti` varchar(1000) NOT NULL,
+  `Aika` datetime NOT NULL,
+  `Nimi` varchar(60) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE `chat`
+  ADD PRIMARY KEY (`ID`);
+
+ALTER TABLE `chat`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+COMMIT;
