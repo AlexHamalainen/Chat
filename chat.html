@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="fi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+<title>Chat</title>
+<link href="../home/css/home1.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<style>
+    #feet {
+        z-index: 1;
+    }
+    #wrapper{
+        margin: auto;
+        background-color: #333;
+        width: 100%;
+        margin-bottom: 20%;
+        padding: 20px;
+        font-size: 10px;
+        margin-top: 5%;
+    }
+    #messages{
+        border-radius: 5px;
+        margin: auto;
+        margin-top: 5%;
+        border: 1px solid #eee;
+        width: 90%;
+        height: 300px;
+        padding: 20px;
+        background-color: rgb(211, 209, 204);
+        overflow: auto;
+    }
+    #inputwrapper{
+        width: 90%;
+        margin: auto;
+        margin-top: 2%;
+        margin-bottom: 5%;
+        text-align: center;
+    }
+    #enterchat{
+        border-radius: 5px;
+        width: 100%;
+        height: 50px;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+    #user {
+        border-radius: 5px;
+        width: 40%;
+        height: 50px;
+        padding: 10px;
+        box-sizing: border-box;
+        float: left;
+        margin: 0.3%;
+        margin-top: 0%;
+    }
+    #sendbtn{
+        border-radius: 5px;
+        width: 20%;
+        height: 50px;
+        font-weight: bold;
+        font-family: Tahoma;
+        background-color: #333;
+        color: #FFF;
+        text-align: center;
+        box-sizing: border-box;
+        margin-top: 5px;
+    }
+    @media screen and (min-width: 600px) {
+    #wrapper {
+        font-size: 15px;
+        width: 60%;
+        border-radius: 10px;
+    }
+    #messages {
+        height: 350px;
+    }
+    #sendbtn {
+        width: 15%;
+    }
+    #enterchat {
+        width: 84%;
+    }
+    /* #user {
+        width: 30%;
+    } */
+}
+</style>
+</head>
+<body class="taustapilvet">
+<script>
+    setInterval(loadDoc, 1000);
+    function loadDoc() {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("messages").innerHTML =
+            this.responseText;
+            }
+        };
+        xhttp.open("GET", "hae.php", true);
+        xhttp.send();
+        }
+    function sendajax() {
+        var str = document.getElementById("enterchat").value;
+        var usr = document.getElementById("user").value;
+        var xhttp;
+        if (str == "") {
+            return;
+        }
+        if (usr == "") {
+            usr = "anonyymi";
+        }
+        xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+            loadDoc();
+            }
+        };
+        xhttp.open("GET", "vie.php?message="+str+"&user="+usr, true);
+        xhttp.send();
+        document.getElementById("enterchat").value = "";
+    }
+</script>
+<nav id="nav" class="navbar navbar-expand-md navbar-light"></nav>
+<div id="wrapper">
+	<div id="messages"></div>
+	<div id="inputwrapper">
+        <input id="user" type="text" on placeholder="Nimimerkki" maxlength="60"/>
+		<input id="enterchat" type="text" on placeholder="Kirjoita viesti chattiin" maxlength="1000"/>
+		<input id="sendbtn"type="button" onclick="sendajax()" value="Lähetä" />
+	</div>
+</div>
+<div class="jumbotron-fluid collapse show" data-toggle="collapse" data-target="#feet" id="feet" style="z-index: 0;"></div>
+<script src="../home/js/home1.js"></script>
+<script>
+    var input = document.getElementById("enterchat");
+    input.addEventListener("keyup", function(event) {
+    if (event.keyCode === 13) {
+        event.preventDefault();
+        document.getElementById("sendbtn").click();
+    }
+    });
+
+    document.getElementById("feet").innerHTML += "<a href='tuhoa.php' style='float: right; margin-right: 1%;'" +
+     "title='Tyhjennä chat'><i class='fas fa-trash-alt'></i></a>";
+</script>	
+</body>
+</html>
