@@ -4,17 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 <title>Chat</title>
-<link href="../home/css/home1.css" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://kit.fontawesome.com/a076d05399.js"></script>
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <style>
-    #feet {
-        z-index: 1;
-    }
     #wrapper{
         margin: auto;
         background-color: #333;
@@ -71,6 +61,9 @@
         box-sizing: border-box;
         margin-top: 5px;
     }
+
+    /* Säätää tekstiä isommaksi isolla näytöllä  */
+
     @media screen and (min-width: 600px) {
     #wrapper {
         font-size: 15px;
@@ -86,15 +79,14 @@
     #enterchat {
         width: 84%;
     }
-    /* #user {
-        width: 30%;
-    } */
 }
 </style>
 </head>
-<body class="taustapilvet">
+<body>
 <script>
+    // Haetaan sekunnin välein viestit tekstikenttään
     setInterval(loadDoc, 1000);
+    // Tämä functio hakee viestit tietokannasta hae.php koodin avulla
     function loadDoc() {
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
@@ -106,16 +98,22 @@
         xhttp.open("GET", "hae.php", true);
         xhttp.send();
         }
+
+    // Tämä functio lähettää viestit tietokantaan vie.php koodin avulla
     function sendajax() {
         var str = document.getElementById("enterchat").value;
         var usr = document.getElementById("user").value;
         var xhttp;
+        // mikäli viesti on tyhjä, ei tehdä mitään
         if (str == "") {
             return;
         }
+        // mikäli lähettäjä on tyhjä mutta viesti ei ole tyhjä, tulee lähettäjän nimimerkiksi anonyymi
         if (usr == "") {
             usr = "anonyymi";
         }
+        // loadDoc functio on tässä hieman turha kun aiemmin on määritetty että se suoritetaan sekunnin välein joka tapauksessa
+        // mutta lähetysnappia painaessa haetaan uudet viestit samalla siis tämän avulla
         xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
@@ -124,21 +122,23 @@
         };
         xhttp.open("GET", "vie.php?message="+str+"&user="+usr, true);
         xhttp.send();
+        // tyhjentää viestikentän jotta ei tarvitse pyyhkiä pois kirjoittamaansa, nimimerkki kenttää ei tyhjennetä
         document.getElementById("enterchat").value = "";
     }
 </script>
-<nav id="nav" class="navbar navbar-expand-md navbar-light"></nav>
+<!-- wrapperiin kuuluu kaikki laatikot, on siis tumman harmaa laatikko -->
 <div id="wrapper">
-	<div id="messages"></div>
+    <!-- messagesiin kuuluu näytettävät chat viestit jotka on haettu tietokannasta -->
+    <div id="messages"></div>
+    <!-- inputwrapper pitää sisällään kaikki inputit, eli nimimerkkilaatikon, viestilaatikon ja lähetä napin. -->
 	<div id="inputwrapper">
         <input id="user" type="text" on placeholder="Nimimerkki" maxlength="60"/>
 		<input id="enterchat" type="text" on placeholder="Kirjoita viesti chattiin" maxlength="1000"/>
 		<input id="sendbtn"type="button" onclick="sendajax()" value="Lähetä" />
 	</div>
 </div>
-<div class="jumbotron-fluid collapse show" data-toggle="collapse" data-target="#feet" id="feet" style="z-index: 0;"></div>
-<script src="../home/js/home1.js"></script>
 <script>
+    // Tämän koodin avulla saadaan enteriä painalla lähetettyä viesti chattiin, tekee siis saman kuin lähetä napin painaminen
     var input = document.getElementById("enterchat");
     input.addEventListener("keyup", function(event) {
     if (event.keyCode === 13) {
@@ -146,9 +146,6 @@
         document.getElementById("sendbtn").click();
     }
     });
-
-    document.getElementById("feet").innerHTML += "<a href='tuhoa.php' style='float: right; margin-right: 1%;'" +
-     "title='Tyhjennä chat'><i class='fas fa-trash-alt'></i></a>";
 </script>	
 </body>
 </html>
